@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AdviseBrain - Your Trusted Partner In Business Solutions</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root{
+      --primary:#1B4332;
+      --primary-light:#2D6A4F;
+      --accent:#C9A84C;
+      --bg-cream:#F5F0E8;
+      --bg-light:#FAF8F5;
+      --text-dark:#1A1A1A;
+      --text-muted:#666;
+      --white:#FFF;
+      --wa:#25D366;
+      --wa-dark:#1fae55;
+    }
+    html{ scroll-behavior:smooth; }
+    body{ font-family: "Segoe UI", system-ui, sans-serif; color:var(--text-dark); background:var(--white); overflow-x:hidden; }
+
+    /* NAV */
+    nav{
+      position:fixed; top:0; width:100%; z-index:1000;
+      background:var(--white); box-shadow:0 2px 20px rgba(0,0,0,.08);
+      padding:0 5%; height:68px; display:flex; align-items:center; justify-content:space-between;
+    }
+    .logo{ font-size:1.5rem; font-weight:800; color:var(--primary); text-decoration:none; }
+    .logo span{ color:var(--accent); }
+    .nav-links{ display:flex; gap:1.8rem; list-style:none; align-items:center; }
+    .nav-links a{ text-decoration:none; color:var(--text-dark); font-weight:500; font-size:.92rem; transition:color .3s; }
+    .nav-links a:hover{ color:var(--accent); }
+    .nav-cta{ background:var(--primary)!important; color:var(--white)!important; padding:.5rem 1.2rem; border-radius:6px; }
+    .nav-cta:hover{ background:var(--accent)!important; }
+    .hamburger{ display:none; flex-direction:column; cursor:pointer; gap:5px; }
+    .hamburger span{ width:25px; height:3px; background:var(--primary); border-radius:3px; }
+    .mobile-menu{
+      display:none; position:fixed; top:68px; left:0; width:100%;
+      background:var(--white); padding:1rem 5%; box-shadow:0 10px 20px rgba(0,0,0,.1);
+      z-index:999; flex-direction:column; gap:.8rem;
+    }
+    .mobile-menu.open{ display:flex; }
+    .mobile-menu a{ text-decoration:none; color:var(--text-dark); font-weight:500; padding:.6rem 0; border-bottom:1px solid #eee; font-size:.95rem; }
+
+    /* HERO */
+    .hero{
+      margin-top:68px;
+      background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);
+      min-height:92vh; display:flex; align-items:center; padding:4rem 5%;
+      position:relative; overflow:hidden;
+    }
+    .hero::before{ content:""; position:absolute; top:-40%; right:-8%; width:550px; height:550px; background:rgba(201,168,76,.1); border-radius:50%; }
+    .hero::after{ content:""; position:absolute; bottom:-25%; left:-5%; width:400px; height:400px; background:rgba(255,255,255,.04); border-radius:50%; }
+    .hero-content{ max-width:680px; position:relative; z-index:2; }
+    .hero-badge{
+      display:inline-block; background:rgba(201,168,76,.2);
+      border:1px solid var(--accent); color:var(--accent);
+      padding:.35rem 1rem; border-radius:50px; font-size:.8rem; font-weight:700;
+      margin-bottom:1.5rem; letter-spacing:1px; text-transform:uppercase;
+    }
+    .hero h1{ font-size:clamp(1.9rem,5vw,3.4rem); color:var(--white); font-weight:800; line-height:1.2; margin-bottom:1.2rem; }
+    .hero h1 span{ color:var(--accent); }
+    .hero p{ color:rgba(255,255,255,.85); font-size:1.05rem; line-height:1.7; margin-bottom:2rem; max-width:540px; }
+    .hero-btns{ display:flex; gap:1rem; flex-wrap:wrap; }
+    .btn-primary{
+      background:var(--accent); color:var(--white); padding:.9rem 2rem; border-radius:8px;
+      font-weight:700; font-size:.95rem; text-decoration:none; display:inline-flex; align-items:center; gap:.4rem;
+      transition:all .3s; border:none; cursor:pointer;
+    }
+    .btn-primary:hover{ background:#b8972a; transform:translateY(-2px); box-shadow:0 8px 25px rgba(201,168,76,.4); }
+    .btn-outline{
+      background:transparent; color:var(--white); padding:.9rem 2rem; border-radius:8px;
+      font-weight:700; font-size:.95rem; text-decoration:none; display:inline-flex; align-items:center; gap:.4rem;
+      border:2px solid rgba(255,255,255,.5); transition:all .3s; cursor:pointer;
+    }
+    .btn-outline:hover{ border-color:var(--white); background:rgba(255,255,255,.1); }
+
+    .hero-contact{ margin-top:2.5rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+    .hero-contact-item{
+      display:flex; align-items:center; gap:.7rem; color:rgba(255,255,255,.9);
+      text-decoration:none; border-radius:12px; padding:.4rem .6rem;
+      transition: background .25s, transform .25s;
+    }
+    .hero-contact-item:hover{ background:rgba(255,255,255,.08); transform:translateY(-1px); }
+    .h-icon{
+      background:var(--accent); width:38px; height:38px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0;
+    }
+    .h-icon.wa{ background:var(--wa); }
+    .h-icon-text small{ display:block; font-size:.72rem; opacity:.7; }
+    .h-icon-text strong{ font-size:.92rem; }
+
+    /* STATS */
+    .stats{ background:var(--white); padding:3rem 5%; }
+    .stats-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; max-width:900px; margin:0 auto; }
+    .stat-card{ background:var(--primary); color:var(--white); padding:2rem 1.5rem; border-radius:14px; text-align:center; }
+    .stat-card .se{ font-size:1.8rem; margin-bottom:.4rem; }
+    .stat-card .s-num{ font-size:clamp(1.7rem,4vw,2.4rem); font-weight:800; color:var(--accent); }
+    .stat-card .s-label{ font-size:.88rem; opacity:.85; margin-top:.3rem; }
+
+    /* SECTIONS */
+    .section-label{ text-align:center; font-size:.78rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent); margin-bottom:.7rem; }
+    .section-title{ text-align:center; font-size:clamp(1.7rem,4vw,2.7rem); font-weight:800; color:var(--primary); margin-bottom:.8rem; }
+    .section-sub{ text-align:center; color:var(--text-muted); font-size:.97rem; line-height:1.7; max-width:580px; margin:0 auto 3rem; }
+
+    /* WHY */
+    .why{ padding:5rem 5%; background:var(--bg-cream); }
+    .features-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:1.8rem; max-width:1100px; margin:0 auto; }
+    .feature-card{ background:var(--white); padding:2rem; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,.06); transition:transform .3s, box-shadow .3s; }
+    .feature-card:hover{ transform:translateY(-5px); box-shadow:0 12px 35px rgba(0,0,0,.12); }
+    .f-icon{ width:58px; height:58px; background:linear-gradient(135deg,var(--primary),var(--primary-light)); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.6rem; margin-bottom:1.1rem; }
+    .feature-card h3{ font-size:1rem; font-weight:700; color:var(--primary); margin-bottom:.6rem; }
+    .feature-card p{ color:var(--text-muted); font-size:.88rem; line-height:1.6; }
+
+    /* SERVICES */
+    .services{ padding:5rem 5%; background:var(--bg-light); }
+    .cat-tabs{ display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; margin-bottom:2.5rem; }
+    .cat-tab{
+      padding:.55rem 1.3rem; border-radius:50px; border:2px solid var(--primary);
+      color:var(--primary); font-size:.85rem; font-weight:600; cursor:pointer;
+      background:transparent; transition:all .3s; font-family:inherit;
+    }
+    .cat-tab.active, .cat-tab:hover{ background:var(--primary); color:var(--white); }
+    .cat-panel{ display:none; }
+    .cat-panel.active{ display:block; }
+    .cat-header{ display:flex; align-items:center; gap:.8rem; margin-bottom:1.5rem; }
+    .cat-header-icon{
+      width:50px; height:50px; background:var(--primary); border-radius:12px;
+      display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0;
+    }
+    .cat-header h3{ font-size:1.3rem; font-weight:800; color:var(--primary); }
+    .cat-header p{ font-size:.84rem; color:var(--text-muted); }
+
+    .service-list{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; }
+    .srv-item{
+      background:var(--white); border:1.5px solid #E8E8E8; border-radius:12px;
+      padding:1.2rem 1.3rem; display:flex; align-items:center; justify-content:space-between;
+      gap:.8rem; transition:all .3s; cursor:pointer;
+    }
+    .srv-item:hover{ border-color:var(--accent); box-shadow:0 6px 20px rgba(0,0,0,.09); transform:translateY(-2px); }
+    .srv-item:hover .srv-name{ color:var(--primary); }
+    .srv-left{ display:flex; align-items:center; gap:.7rem; flex:1; }
+    .srv-dot{ width:8px; height:8px; background:var(--accent); border-radius:50%; flex-shrink:0; }
+    .srv-name{ font-size:.88rem; font-weight:600; color:var(--text-dark); line-height:1.3; }
+    .srv-price-tag{ font-size:.82rem; font-weight:800; color:var(--accent); white-space:nowrap; }
+    .srv-add{
+      width:28px; height:28px; border-radius:50%; background:var(--primary); color:var(--white);
+      border:none; font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center;
+      flex-shrink:0; transition:background .3s;
+    }
+    .srv-add:hover{ background:var(--accent); }
+    .has-price{ border-left:3px solid var(--accent); }
+
+    /* MISSION */
+    .mission{ padding:5rem 5%; background:var(--primary); text-align:center; }
+    .mission .section-label{ color:var(--accent); }
+    .mission .section-title{ color:var(--white); }
+    .mission p{ color:rgba(255,255,255,.85); font-size:1.05rem; line-height:1.8; max-width:680px; margin:0 auto; }
+
+    /* CONTACT */
+    .contact{ padding:5rem 5%; background:var(--bg-cream); }
+    .contact-wrap{ max-width:1000px; margin:0 auto; display:grid; grid-template-columns:1fr 1.4fr; gap:4rem; }
+    .ci-head h2{ font-size:clamp(1.5rem,3vw,2.1rem); font-weight:800; color:var(--primary); margin-bottom:.8rem; }
+    .ci-head p{ color:var(--text-muted); line-height:1.7; margin-bottom:2rem; font-size:.93rem; }
+    .ci-list{ display:flex; flex-direction:column; gap:1.2rem; }
+    .ci-item{ display:flex; align-items:flex-start; gap:.9rem; }
+    .ci-icon{
+      width:44px; height:44px; background:var(--primary); border-radius:10px;
+      display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0;
+    }
+    .ci-icon.wa{ background:var(--wa); }
+    .ci-text small{ display:block; font-size:.73rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:.2rem; }
+    .ci-text strong{ color:var(--primary); font-size:.9rem; }
+    .ci-link{ text-decoration:none; color:inherit; border-radius:12px; padding:.2rem .2rem; }
+    .ci-link:hover strong{ color:var(--accent); }
+
+    .c-form{ background:var(--white); padding:2.3rem; border-radius:20px; box-shadow:0 8px 40px rgba(0,0,0,.08); }
+    .c-form h3{ font-size:1.2rem; font-weight:700; color:var(--primary); margin-bottom:.2rem; }
+    .c-form .fsub{ color:var(--text-muted); font-size:.85rem; margin-bottom:1.4rem; }
+    .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .form-grp{ margin-bottom:1.1rem; }
+    .form-grp label{ display:block; font-size:.82rem; font-weight:600; color:var(--text-dark); margin-bottom:.35rem; }
+    .form-grp input, .form-grp select, .form-grp textarea{
+      width:100%; padding:.72rem .95rem; border:1.5px solid #E5E5E5; border-radius:8px;
+      font-size:.88rem; font-family:inherit; color:var(--text-dark); transition:border-color .3s;
+      background:#FAFAFA; outline:none;
+    }
+    .form-grp input:focus, .form-grp select:focus, .form-grp textarea:focus{ border-color:var(--accent); background:var(--white); }
+    .form-grp textarea{ resize:vertical; min-height:90px; }
+    .sub-btn{
+      width:100%; padding:.95rem; background:var(--primary); color:var(--white); border:none; border-radius:8px;
+      font-size:.97rem; font-weight:700; cursor:pointer; transition:all .3s; font-family:inherit;
+    }
+    .sub-btn:hover{ background:var(--accent); }
+    .success-msg{
+      display:none; background:#d4edda; color:#155724; padding:.9rem; border-radius:8px;
+      text-align:center; margin-top:.9rem; font-weight:600; font-size:.9rem;
+    }
+
+    /* FOOTER */
+    footer{ background:#0D1F18; color:rgba(255,255,255,.75); padding:4rem 5% 2rem; }
+    .f-grid{ display:grid; grid-template-columns:2fr 1fr 1fr; gap:3rem; margin-bottom:3rem; }
+    .f-brand .logo{ color:var(--white); margin-bottom:.9rem; display:block; }
+    .f-brand p{ font-size:.87rem; line-height:1.7; opacity:.7; }
+    .f-col h4{ color:var(--white); font-size:.9rem; font-weight:700; margin-bottom:1.1rem; padding-bottom:.5rem; position:relative; }
+    .f-col h4::after{ content:""; position:absolute; bottom:0; left:0; width:28px; height:2px; background:var(--accent); }
+    .f-col ul{ list-style:none; display:flex; flex-direction:column; gap:.55rem; }
+    .f-col ul li a{ color:rgba(255,255,255,.6); text-decoration:none; font-size:.85rem; transition:color .3s; }
+    .f-col ul li a:hover{ color:var(--accent); }
+    .f-bottom{
+      border-top:1px solid rgba(255,255,255,.1); padding-top:1.5rem;
+      display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.8rem;
+      font-size:.8rem; opacity:.55;
+    }
+
+    /* FLOATING BUTTONS */
+    .scroll-top{
+      position:fixed; bottom:1.5rem; right:1.5rem; width:44px; height:44px; background:var(--primary);
+      color:var(--white); border:none; border-radius:50%; font-size:1.2rem; cursor:pointer; display:none;
+      align-items:center; justify-content:center; box-shadow:0 4px 15px rgba(0,0,0,.2); transition:background .3s; z-index:500;
+    }
+    .scroll-top:hover{ background:var(--accent); }
+    .scroll-top.show{ display:flex; }
+
+    .wa-float{
+      position:fixed; bottom:1.5rem; left:1.5rem; z-index:600;
+      display:flex; align-items:center; gap:.7rem;
+      text-decoration:none;
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(0,0,0,.08);
+      border-radius:999px;
+      padding:.55rem .9rem .55rem .6rem;
+      box-shadow:0 10px 30px rgba(0,0,0,.18);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: transform .25s, box-shadow .25s, background .25s;
+      max-width: min(86vw, 420px);
+    }
+    .wa-float:hover{ transform: translateY(-2px); box-shadow:0 16px 40px rgba(0,0,0,.22); background:rgba(255,255,255,.98); }
+    .wa-bubble{
+      width:44px; height:44px; border-radius:50%;
+      background:var(--wa);
+      display:flex; align-items:center; justify-content:center;
+      color:#fff; font-weight:900; font-size:1.2rem;
+      flex-shrink:0;
+      box-shadow:0 8px 20px rgba(37,211,102,.35);
+    }
+    .wa-float .wa-text{ display:flex; flex-direction:column; gap:.1rem; min-width:0; }
+    .wa-float .wa-text strong{ color:var(--text-dark); font-size:.92rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .wa-float .wa-text small{ color:var(--text-muted); font-size:.78rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .wa-float .wa-cta{
+      margin-left:auto;
+      background: var(--wa);
+      color:#fff;
+      border:none;
+      padding:.55rem .8rem;
+      border-radius:999px;
+      font-weight:800;
+      font-size:.82rem;
+      cursor:pointer;
+      transition: background .25s;
+      white-space:nowrap;
+    }
+    .wa-float:hover .wa-cta{ background: var(--wa-dark); }
+
+    /* ANIM */
+    .fade-in{ opacity:0; transform:translateY(28px); transition:opacity .6s ease, transform .6s ease; }
+    .fade-in.vis{ opacity:1; transform:translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px){
+      .nav-links{ display:none; }
+      .hamburger{ display:flex; }
+      .contact-wrap{ grid-template-columns:1fr; gap:2rem; }
+      .f-grid{ grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width: 600px){
+      .stats-grid{ grid-template-columns:1fr; max-width:360px; }
+      .hero{ text-align:center; }
+      .hero-btns{ justify-content:center; }
+      .hero-contact{ justify-content:center; }
+      .form-row{ grid-template-columns:1fr; }
+      .f-grid{ grid-template-columns:1fr; gap:1.8rem; }
+      .f-bottom{ flex-direction:column; text-align:center; }
+      .c-form{ padding:1.5rem; }
+      .service-list{ grid-template-columns:1fr; }
+      .cat-tabs{ gap:.4rem; }
+      .cat-tab{ font-size:.78rem; padding:.45rem 1rem; }
+      .wa-float{ left:1rem; right:1rem; width:auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="logo" href="#">Advise<span>Brain</span></a>
+    <ul class="nav-links">
+      <li><a href="#why">Why Us</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#mission">Mission</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#contact" class="nav-cta">Free Quote</a></li>
+    </ul>
+    <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#why" onclick="closeMenu()">Why Us</a>
+    <a href="#services" onclick="closeMenu()">Services</a>
+    <a href="#mission" onclick="closeMenu()">Mission</a>
+    <a href="#contact" onclick="closeMenu()">Contact</a>
+    <a href="#contact" onclick="closeMenu()" style="color:var(--accent);font-weight:700;">Get Free Quote →</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">🏆 Trusted Business Partner</div>
+      <h1>Your Trusted Partner In <span>Business Solutions</span></h1>
+      <p>Expert accounting, tax filing, business registration & compliance services — helping your business grow with accuracy, clarity, and confidence.</p>
+      <div class="hero-btns">
+        <a href="#contact" class="btn-primary">Get Free Quote ↗</a>
+        <a href="#services" class="btn-outline">Our Services →</a>
+      </div>
+
+      <div class="hero-contact">
+        <!-- WhatsApp link (requested) -->
+        <a class="hero-contact-item" href="https://wa.me/919220347573" target="_blank" rel="noopener">
+          <div class="h-icon wa">💬</div>
+          <div class="h-icon-text">
+            <small>WhatsApp</small>
+            <strong>9220347573</strong>
+          </div>
+        </a>
+
+        <!-- Optional phone link (still handy) -->
+        <a class="hero-contact-item" href="tel:+919220347573">
+          <div class="h-icon">📞</div>
+          <div class="h-icon-text">
+            <small>Call</small>
+            <strong>+91 92203 47573</strong>
+          </div>
+        </a>
+
+        <div class="hero-contact-item" style="pointer-events:none;">
+          <div class="h-icon">🕐</div>
+          <div class="h-icon-text">
+            <small>Office Hours</small>
+            <strong>Mon–Sun: 10AM–7PM</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats">
+    <div class="stats-grid">
+      <div class="stat-card fade-in">
+        <div class="se">🌆</div>
+        <div class="s-num" data-target="500">0</div>
+        <div class="s-label">Cities Served</div>
+      </div>
+      <div class="stat-card fade-in">
+        <div class="se">😊</div>
+        <div class="s-num" data-target="10000">0</div>
+        <div class="s-label">Happy Clients</div>
+      </div>
+      <div class="stat-card fade-in">
+        <div class="se">✅</div>
+        <div class="s-num" data-target="3000">0</div>
+        <div class="s-label">Projects Succeeded</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section class="why" id="why">
+    <div class="section-label">WHY CHOOSE US</div>
+    <h2 class="section-title">Complete Business Solutions Under One Roof</h2>
+    <p class="section-sub">From bookkeeping to tax planning, we ensure accuracy, compliance, and financial clarity so you can focus entirely on growing your business.</p>
+    <div class="features-grid">
+      <div class="feature-card fade-in">
+        <div class="f-icon">🧮</div>
+        <h3>Complete Accounting for Growing Businesses</h3>
+        <p>We handle accounting, tax filing, audits, and payroll with precision — so you focus on business while we manage your financial responsibilities professionally.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="f-icon">🛡️</div>
+        <h3>Tax & Compliance Excellence</h3>
+        <p>Get stress-free tax filing, audit readiness, and accurate financials. Our expertise ensures your business stays compliant and optimized throughout the year.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="f-icon">🏢</div>
+        <h3>Business Registration Made Simple</h3>
+        <p>From Proprietorship to Private Limited Companies, we handle all registrations quickly and accurately so you can start business from day one.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="f-icon">📊</div>
+        <h3>GST & ITR Filing Experts</h3>
+        <p>Simplify GST and ITR filing with our expert team. We serve startups, MSMEs, and professionals across India with precision and speed.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="f-icon">🌍</div>
+        <h3>Pan-India Presence</h3>
+        <p>With operations across 500+ cities, we bring professional business advisory and compliance services to every corner of India and abroad.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="f-icon">⚡</div>
+        <h3>Fast, Reliable & Affordable</h3>
+        <p>We prioritize speed and accuracy. Our experienced team is available Mon–Sun to ensure your business needs are addressed without delays at flat fees.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="section-label">WHAT WE OFFER</div>
+    <h2 class="section-title">Our Services</h2>
+    <p class="section-sub">Comprehensive registrations, compliance, returns, and loan services — everything your business needs, all under one roof.</p>
+
+    <div class="cat-tabs">
+      <button class="cat-tab active" onclick="showCat('registrations', this)">📋 Registrations</button>
+      <button class="cat-tab" onclick="showCat('returns', this)">📁 Returns & Business</button>
+      <button class="cat-tab" onclick="showCat('compliance', this)">🛡️ Compliance</button>
+      <button class="cat-tab" onclick="showCat('loans', this)">💰 Loans</button>
+    </div>
+
+    <div class="cat-panel active" id="cat-registrations">
+      <div class="cat-header">
+        <div class="cat-header-icon">📋</div>
+        <div>
+          <h3>Registrations</h3>
+          <p>All government registrations handled smoothly and quickly</p>
+        </div>
+      </div>
+      <div class="service-list">
+        <div class="srv-item has-price" onclick="pickSrv(this,'GST Registration')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">GST Registration</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'MSME Registration')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">MSME Registration</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'FSSAI Registration')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">FSSAI Registration</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'Shop And Establishment Registration')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Shop And Establishment Registration</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'Trademark Registration')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Trademark Registration</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'Patent Registration')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Patent Registration</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'RERA Registration')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">RERA Registration</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'FCRA Registration')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">FCRA Registration</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'Society Registration')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Society Registration</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'Drug License')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Drug License</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'Import Export Code')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Import Export Code</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'ISO Certification')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">ISO Certification</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+      </div>
+    </div>
+
+    <div class="cat-panel" id="cat-returns">
+      <div class="cat-header">
+        <div class="cat-header-icon">📁</div>
+        <div>
+          <h3>Returns & Business Experts</h3>
+          <p>Company formations, GST filing, ITR and more</p>
+        </div>
+      </div>
+      <div class="service-list">
+        <div class="srv-item has-price" onclick="pickSrv(this,'Sole Proprietorship Firm')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Sole Proprietorship Firm</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'Partnership Firm')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Partnership Firm</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'Limited Liability Partnership')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Limited Liability Partnership</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'LLP Compliance')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">LLP Compliance</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'Association Of Person / HUF')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Association Of Person / HUF</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'Private Limited Company')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Private Limited Company</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'One Person Company')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">One Person Company</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'Startup India Registration')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Startup India Registration</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'Section 8 Company')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Section 8 Company</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'GST Filing')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">GST Filing</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'Income Tax Return (ITR)')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Income Tax Return (ITR)</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+        <div class="srv-item has-price" onclick="pickSrv(this,'TDS & TCS Returns')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">TDS & TCS Returns</div></div><span class="srv-price-tag">₹1,499</span><button class="srv-add">+</button></div>
+      </div>
+    </div>
+
+    <div class="cat-panel" id="cat-compliance">
+      <div class="cat-header">
+        <div class="cat-header-icon">🛡️</div>
+        <div>
+          <h3>Compliance</h3>
+          <p>Stay legally compliant with expert compliance management</p>
+        </div>
+      </div>
+      <div class="service-list">
+        <div class="srv-item" onclick="pickSrv(this,'Private Limited Company Compliance')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Private Limited Company Compliance</div></div><button class="srv-add">+</button></div>
+        <div class="srv-item" onclick="pickSrv(this,'Public Limited Company Compliance')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Public Limited Company Compliance</div></div><button class="srv-add">+</button></div>
+        <div class="srv-item" onclick="pickSrv(this,'Limited Liability Partnership Compliance')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Limited Liability Partnership Compliance</div></div><button class="srv-add">+</button></div>
+        <div class="srv-item" onclick="pickSrv(this,'Appointment/Resignation Of Director')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Appointment / Resignation Of Director</div></div><button class="srv-add">+</button></div>
+        <div class="srv-item" onclick="pickSrv(this,'Increase In Share Capital Of Company')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Increase In Share Capital Of Company</div></div><button class="srv-add">+</button></div>
+        <div class="srv-item" onclick="pickSrv(this,'Share Transfer')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Share Transfer</div></div><button class="srv-add">+</button></div>
+        <div class="srv-item" onclick="pickSrv(this,'Conversion From OPC To Private Limited')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Conversion From OPC To Private Limited</div></div><button class="srv-add">+</button></div>
+        <div class="srv-item" onclick="pickSrv(this,'Sole Proprietorship Firm Compliance')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Sole Proprietorship Firm Compliance</div></div><button class="srv-add">+</button></div>
+        <div class="srv-item" onclick="pickSrv(this,'Partnership Firm Compliance')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Partnership Firm Compliance</div></div><button class="srv-add">+</button></div>
+        <div class="srv-item" onclick="pickSrv(this,'SEBI Compliances')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">SEBI Compliances</div></div><button class="srv-add">+</button></div>
+        <div class="srv-item" onclick="pickSrv(this,'MSME Compliances')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">MSME Compliances</div></div><button class="srv-add">+</button></div>
+        <div class="srv-item" onclick="pickSrv(this,'FCRA Compliances')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">FCRA Compliances</div></div><button class="srv-add">+</button></div>
+      </div>
+    </div>
+
+    <div class="cat-panel" id="cat-loans">
+      <div class="cat-header">
+        <div class="cat-header-icon">💰</div>
+        <div>
+          <h3>Loans</h3>
+          <p>Hassle-free loan assistance for all your financial needs</p>
+        </div>
+      </div>
+      <div class="service-list">
+        <div class="srv-item" onclick="pickSrv(this,'Business Loan')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Business Loan</div></div><button class="srv-add">+</button></div>
+        <div class="srv-item" onclick="pickSrv(this,'Personal Loan')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Personal Loan</div></div><button class="srv-add">+</button></div>
+        <div class="srv-item" onclick="pickSrv(this,'Education Loan')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Education Loan</div></div><button class="srv-add">+</button></div>
+        <div class="srv-item" onclick="pickSrv(this,'Home Loan')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Home Loan</div></div><button class="srv-add">+</button></div>
+        <div class="srv-item" onclick="pickSrv(this,'Gold Loan')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Gold Loan</div></div><button class="srv-add">+</button></div>
+        <div class="srv-item" onclick="pickSrv(this,'Loan Against Property')"><div class="srv-left"><div class="srv-dot"></div><div class="srv-name">Loan Against Property</div></div><button class="srv-add">+</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSION -->
+  <section class="mission" id="mission">
+    <div class="section-label">OUR MISSION</div>
+    <h2 class="section-title" style="color:var(--white)">Empowering Indian Businesses</h2>
+    <p>
+      To simplify GST filing, ITR, business registration, and compliance for startups, MSMEs, and professionals across India.
+      We are a congregation of professionally qualified and experienced personnel dedicated to adding value and optimizing the benefits accruing to our clients throughout India and abroad.
+    </p>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="section-label">GET IN TOUCH</div>
+    <h2 class="section-title">Request A Free Quote</h2>
+    <p class="section-sub">Fill out the form below and our experts will get back to you promptly.</p>
+
+    <div class="contact-wrap">
+      <div class="ci-head">
+        <h2>Let's Talk Business</h2>
+        <p>Reach out to us through any of the following channels. We're available Mon–Sun, 10AM to 7PM to serve you.</p>
+
+        <div class="ci-list">
+          <div class="ci-item">
+            <div class="ci-icon wa">💬</div>
+            <a class="ci-link" href="https://wa.me/919220347573" target="_blank" rel="noopener">
+              <div class="ci-text">
+                <small>WhatsApp</small>
+                <strong>9220347573 (Chat Now)</strong>
+              </div>
+            </a>
+          </div>
+
+          <div class="ci-item">
+            <div class="ci-icon">📞</div>
+            <a class="ci-link" href="tel:+919220347573">
+              <div class="ci-text">
+                <small>Telephone</small>
+                <strong>+91 92203 47573</strong>
+              </div>
+            </a>
+          </div>
+
+          <div class="ci-item">
+            <div class="ci-icon">📧</div>
+            <div class="ci-text"><small>Email Address</small><strong>support@theadvisebrain.com</strong></div>
+          </div>
+          <div class="ci-item">
+            <div class="ci-icon">🕐</div>
+            <div class="ci-text"><small>Office Hours</small><strong>MON–SUN: 10AM – 7PM</strong></div>
+          </div>
+          <div class="ci-item">
+            <div class="ci-icon">🌍</div>
+            <div class="ci-text"><small>Coverage</small><strong>500+ Cities Across India</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="c-form">
+        <h3>📋 Free Consultation Request</h3>
+        <p class="fsub">Fill in your details and we'll get back to you shortly.</p>
+
+        <form id="cForm" onsubmit="handleSubmit(event)">
+          <div class="form-row">
+            <div class="form-grp">
+              <label>First Name *</label>
+              <input type="text" placeholder="Rahul" required />
+            </div>
+            <div class="form-grp">
+              <label>Last Name *</label>
+              <input type="text" placeholder="Sharma" required />
+            </div>
+          </div>
+          <div class="form-grp">
+            <label>Phone Number *</label>
+            <input type="tel" placeholder="+91 XXXXX XXXXX" required />
+          </div>
+          <div class="form-grp">
+            <label>Email Address</label>
+            <input type="email" placeholder="rahul@example.com" />
+          </div>
+          <div class="form-grp">
+            <label>Service Required</label>
+            <select id="serviceSelect">
+              <option value="">Select a Service</option>
+              <optgroup label="Registrations">
+                <option>GST Registration</option><option>MSME Registration</option><option>FSSAI Registration</option>
+                <option>Shop And Establishment Registration</option><option>Trademark Registration</option><option>Patent Registration</option>
+                <option>RERA Registration</option><option>FCRA Registration</option><option>Society Registration</option>
+                <option>Drug License</option><option>Import Export Code</option><option>ISO Certification</option>
+              </optgroup>
+              <optgroup label="Returns & Business">
+                <option>Sole Proprietorship Firm</option><option>Partnership Firm</option><option>Limited Liability Partnership</option>
+                <option>LLP Compliance</option><option>Association Of Person / HUF</option><option>Private Limited Company</option>
+                <option>One Person Company</option><option>Startup India Registration</option><option>Section 8 Company</option>
+                <option>GST Filing</option><option>Income Tax Return (ITR)</option><option>TDS & TCS Returns</option>
+              </optgroup>
+              <optgroup label="Compliance">
+                <option>Private Limited Company Compliance</option><option>Public Limited Company Compliance</option>
+                <option>Limited Liability Partnership Compliance</option><option>Appointment/Resignation Of Director</option>
+                <option>Increase In Share Capital Of Company</option><option>Share Transfer</option>
+                <option>Conversion From OPC To Private Limited</option><option>Sole Proprietorship Firm Compliance</option>
+                <option>Partnership Firm Compliance</option><option>SEBI Compliances</option><option>MSME Compliances</option><option>FCRA Compliances</option>
+              </optgroup>
+              <optgroup label="Loans">
+                <option>Business Loan</option><option>Personal Loan</option><option>Education Loan</option>
+                <option>Home Loan</option><option>Gold Loan</option><option>Loan Against Property</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="form-grp">
+            <label>Message</label>
+            <textarea placeholder="Tell us about your requirements..."></textarea>
+          </div>
+          <button type="submit" class="sub-btn">🚀 Send Request</button>
+          <div class="success-msg" id="succMsg">✅ Thank you! We'll contact you soon.</div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="f-grid">
+      <div class="f-brand">
+        <a class="logo" href="#">Advise<span>Brain</span></a>
+        <p>Your trusted partner in business solutions. We simplify GST filing, ITR, business registration, and compliance for startups, MSMEs, and professionals across India.</p>
+      </div>
+      <div class="f-col">
+        <h4>Quick Services</h4>
+        <ul>
+          <li><a href="#services">GST Registration</a></li>
+          <li><a href="#services">Trademark Registration</a></li>
+          <li><a href="#services">Company Incorporation</a></li>
+          <li><a href="#services">Income Tax Return</a></li>
+          <li><a href="#services">ISO Certification</a></li>
+          <li><a href="#services">Business Loan</a></li>
+        </ul>
+      </div>
+      <div class="f-col">
+        <h4>Contact Us</h4>
+        <ul>
+          <li><a href="https://wa.me/919220347573" target="_blank" rel="noopener">💬 WhatsApp: 9220347573</a></li>
+          <li><a href="tel:+919220347573">📞 Call: +91 92203 47573</a></li>
+          <li><a href="#contact">🕐 Mon–Sun: 10AM – 7PM</a></li>
+          <li><a href="#contact">🌍 500+ Cities, India</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="f-bottom">
+      <span>© 2025 AdviseBrain. All rights reserved.</span>
+      <span>Trusted by 10,000+ happy clients across India</span>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp button (requested) -->
+  <a class="wa-float" href="https://wa.me/919220347573" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <div class="wa-bubble">💬</div>
+    <div class="wa-text">
+      <strong>Chat on WhatsApp</strong>
+      <small>9220347573 • Quick Support</small>
+    </div>
+    <button class="wa-cta" type="button" tabindex="-1">OPEN</button>
+  </a>
+
+  <button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">↑</button>
+
+  <script>
+    function toggleMenu(){ document.getElementById('mobileMenu').classList.toggle('open'); }
+    function closeMenu(){ document.getElementById('mobileMenu').classList.remove('open'); }
+
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').classList.toggle('show', window.scrollY > 400);
+    });
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+    let counted = false;
+    const cio = new IntersectionObserver(entries => {
+      if(entries[0].isIntersecting && !counted){
+        counted = true;
+        document.querySelectorAll('.s-num').forEach(el => {
+          const target = parseInt(el.dataset.target, 10);
+          let cur = 0;
+          const step = target / 70;
+          const t = setInterval(() => {
+            cur += step;
+            if(cur >= target){ cur = target; clearInterval(t); }
+            el.textContent = Math.floor(cur).toLocaleString('en-IN') + '+';
+          }, 25);
+        });
+      }
+    }, { threshold: 0.5 });
+    const statsEl = document.querySelector('.stats');
+    if(statsEl) cio.observe(statsEl);
+
+    function showCat(id, btn){
+      document.querySelectorAll('.cat-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('cat-' + id).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    function pickSrv(card, name){
+      document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+      const sel = document.getElementById('serviceSelect');
+      for (let o of sel.options){
+        if (o.text === name){ sel.value = o.value || o.text; o.selected = true; break; }
+      }
+      const btn = card.querySelector('.srv-add');
+      btn.textContent = '✓';
+      btn.style.background = 'var(--accent)';
+      setTimeout(() => { btn.textContent = '+'; btn.style.background = 'var(--primary)'; }, 1800);
+    }
+
+    function handleSubmit(e){
+      e.preventDefault();
+      const btn = e.target.querySelector('.sub-btn');
+      btn.textContent = '⏳ Sending...';
+      btn.disabled = true;
+      setTimeout(() => {
+        document.getElementById('succMsg').style.display = 'block';
+        btn.textContent = '✅ Request Sent!';
+        btn.style.background = '#27ae60';
+        e.target.reset();
+      }, 900);
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', function(e){
+        const t = document.querySelector(this.getAttribute('href'));
+        if(t){ e.preventDefault(); t.scrollIntoView({ behavior:'smooth' }); }
+      });
+    });
+  </script>
+</body>
+</html>
